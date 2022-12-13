@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -7,6 +7,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+
+import sharedStylesheet from "./styles/shared.css";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -30,3 +32,7 @@ export default function App() {
     </html>
   );
 }
+
+export const links: LinksFunction = function () {
+  return [{ rel: "stylesheet", href: sharedStylesheet }];
+};
