@@ -1,11 +1,13 @@
 // /expenses/add
 
-import { connect } from "@planetscale/database/dist";
-import { redirect } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
+import { inputFromForm } from "domain-functions";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
-import { config, Env } from "~/db/dbConfig.server";
+import type { Env } from "~/db/dbConfig.server";
+import { addExpense } from "~/db/expense.server";
 
+export type AddAction = typeof action;
 
 export default function AddExpensesPage() {
   return (
@@ -22,13 +24,12 @@ export async function action({
   request: Request;
   context: Env;
 }) {
-  const formData = await request.formData();
-  const conn = connect(config(context));
-  const title = formData.get("title");
-  const amount = formData.get("amount");
-  const date = formData.get("date");
-  const query = "INSERT INTO expense (title, amount, date) VALUES(?,?,?)";
-  const params = [title, Number(amount), date];
-  const result = await conn.execute(query, params);
+  const connect = addExpense(context);
+  const result = await connect(await inputFromForm(request));
+
+  if (!result.success) {
+    return json(result);
+  }
+
   return redirect("/expenses");
 }
