@@ -2,20 +2,14 @@
 
 import { connect } from "@planetscale/database/dist";
 import { redirect } from "@remix-run/cloudflare";
-import { useNavigate } from "@remix-run/react";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
 import { config, Env } from "~/db/dbConfig.server";
 
-export default function AddExpensesPage() {
-  const navigate = useNavigate();
 
-  function closeHandler() {
-    // navigate programmatically
-    navigate("/expenses");
-  }
+export default function AddExpensesPage() {
   return (
-    <Modal onClose={closeHandler}>
+    <Modal redirect={"/expenses"}>
       <ExpenseForm />
     </Modal>
   );
