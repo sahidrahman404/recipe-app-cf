@@ -1,16 +1,15 @@
 // /expenses => sahred layout
 
-import { Link, Outlet } from "@remix-run/react";
+import type { Params } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { FaPlus, FaDownload } from "react-icons/fa";
-import type { Expense } from "~/components/expenses/Chart";
 import ExpensesList from "~/components/expenses/ExpensesList";
-
-const DUMMY_EXPENSES: Expense[] = [
-  { id: "e1", title: "first expense", date: "January 28 2022", amount: 200 },
-  { id: "e2", title: "second expense", date: "November 28 2022", amount: 300 },
-];
+import type { Env } from "~/db/dbConfig.server";
+import { getExpense } from "~/db/expense.server";
 
 export default function ExpensesLayout() {
+  const data = useLoaderData<typeof loader>();
+
   return (
     <>
       <Outlet />
@@ -23,8 +22,25 @@ export default function ExpensesLayout() {
             <FaDownload /> <span>Load Raw Data</span>
           </a>
         </section>
-        <ExpensesList expenses={DUMMY_EXPENSES} />
+        <ExpensesList expenses={data} />
       </main>
     </>
   );
+}
+
+export async function loader({
+  context,
+  params,
+}: {
+  context: Env;
+  params: Params;
+}) {
+  const connect = getExpense(context);
+  const result = await connect(params);
+
+  if (!result.success) console.log(result);
+
+  if (result.success) {
+    return result.data;
+  }
 }
