@@ -1,14 +1,15 @@
 // /expenses => sahred layout
 
-import type { Params } from "@remix-run/react";
+import { json } from "@remix-run/cloudflare";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import type { UnpackData } from "domain-functions";
 import { FaPlus, FaDownload } from "react-icons/fa";
 import ExpensesList from "~/components/expenses/ExpensesList";
 import type { Env } from "~/db/dbConfig.server";
 import { getExpense } from "~/db/expense.server";
 
 export default function ExpensesLayout() {
-  const data = useLoaderData<typeof loader>();
+  const data = useLoaderData<LoaderData>();
 
   return (
     <>
@@ -28,19 +29,13 @@ export default function ExpensesLayout() {
   );
 }
 
-export async function loader({
-  context,
-  params,
-}: {
-  context: Env;
-  params: Params;
-}) {
-  const connect = getExpense(context);
-  const result = await connect(params);
+type LoaderData = UnpackData<typeof getExpense>;
+export async function loader({ context }: { context: Env }) {
+  const result = await getExpense(context);
 
-  if (!result.success) console.log(result);
-
-  if (result.success) {
-    return result.data;
+  if (!result.success) {
+    console.log(result);
+  } else {
+    return json<LoaderData>(result.data);
   }
 }
