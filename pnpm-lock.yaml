@@ -11,7 +11,7 @@ specifiers:
   '@types/react': ^17.0.52
   '@types/react-dom': ^17.0.18
   cross-env: ^7.0.3
-  domain-functions: ^1.4.0
+  domain-functions: ^1.5.0
   eslint: ^8.27.0
   npm-run-all: ^4.1.5
   react: ^17.0.2
@@ -27,7 +27,7 @@ dependencies:
   '@remix-run/cloudflare-pages': 1.8.2_arfmlatn6u4eernl72rvcbrwnm
   '@remix-run/react': 1.8.2_sfoxds7t5ydpegc3knd667wn6m
   cross-env: 7.0.3
-  domain-functions: 1.4.0
+  domain-functions: 1.5.0_zod@3.20.2
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-icons: 4.7.1_react@17.0.2
@@ -3183,8 +3183,10 @@ packages:
     resolution: {integrity: sha512-NMt+m9zFMPZe0JcY9gN224Qvk6qLIdqex29clBvc/y75ZBX9YA9wNK3frsYvu2DI1xcCIwxwnX+TlsJ2DSOADg==}
     dev: true
 
-  /domain-functions/1.4.0:
-    resolution: {integrity: sha512-zg74Okh1HxvSkybBuZac35NaueR/7Gv0czcFZMtDKpp9r6AmfV25pqSZNZmtk2jNaU2uw9EfXeZMmL1ZW3LkFg==}
+  /domain-functions/1.5.0_zod@3.20.2:
+    resolution: {integrity: sha512-E6FQ9ZCgoShfohEiQbQR4l/8ICaILppMs8RUA2PhRfkSUzm75SW5dfMAfTMtBy89GXiME+6OCn1/ghM6En3OOA==}
+    peerDependencies:
+      zod: ^3.19.1
     dependencies:
       qs: 6.11.0
       zod: 3.20.2
