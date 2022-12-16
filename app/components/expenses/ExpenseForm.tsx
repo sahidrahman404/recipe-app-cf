@@ -1,10 +1,33 @@
-import { Link, useActionData } from "@remix-run/react";
+import { Link, useActionData, useMatches, useParams } from "@remix-run/react";
 import { errorMessagesFor } from "domain-functions";
+// import type { LoaderData } from "~/routes/__app/expenses/$id";
 import type { ActionData } from "~/routes/__app/expenses/add";
+import type { Expense } from "./Chart";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData<ActionData>();
+  // const data = useLoaderData<LoaderData>();
+  const params = useParams();
+  const matches = useMatches();
+  const expenses = matches.find(
+    (match) => match.id === "routes/__app/expenses"
+  )?.data;
+  const data = expenses
+    ? expenses.find((expense: Expense) => expense.id === params.id)
+    : null;
+
+  const defaultValue = data
+    ? {
+        title: data.title,
+        amount: data.amount,
+        date: data.date,
+      }
+    : {
+        title: "",
+        amount: "",
+        date: "",
+      };
 
   return (
     <form method="post" className="form" id="expense-form">
@@ -17,6 +40,7 @@ function ExpenseForm() {
           minLength={5}
           maxLength={30}
           required
+          defaultValue={defaultValue.title}
         />
         {typeof validationErrors !== "undefined" ? (
           <span>
@@ -35,6 +59,7 @@ function ExpenseForm() {
             min="0"
             step="0.01"
             required
+            defaultValue={defaultValue.amount}
           />
           {typeof validationErrors !== "undefined" ? (
             <span>
@@ -44,7 +69,16 @@ function ExpenseForm() {
         </p>
         <p>
           <label htmlFor="date">Date</label>
-          <input type="date" id="date" name="date" max={today} required />
+          <input
+            type="date"
+            id="date"
+            name="date"
+            max={today}
+            required
+            defaultValue={
+              defaultValue.date ? defaultValue.date.slice(0, 10) : ""
+            }
+          />
           {typeof validationErrors !== "undefined" ? (
             <span>
               {errorMessagesFor(validationErrors?.inputErrors, "date")[0]}

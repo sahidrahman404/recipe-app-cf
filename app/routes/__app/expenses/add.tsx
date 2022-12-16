@@ -29,5 +29,6 @@ export async function action({
   if (!result.success) {
     return json(result);
   }
+
   return redirect("/expenses");
 }
