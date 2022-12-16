@@ -26,7 +26,7 @@ export const addExpense = makeDomainFunction(
   }
 });
 
-// GET EXPENSE
+// GET EXPENSES
 
 const expense = z.object({
   id: z.string(),
@@ -37,13 +37,36 @@ const expense = z.object({
 
 const expenseResult = z.array(expense);
 
-export const getExpense = makeDomainFunction(envSchema)(async (envSchema) => {
+export const getExpenses = makeDomainFunction(envSchema)(async (envSchema) => {
   try {
-    const conn = connect(config(envSchema));
+    const db = connect(config(envSchema));
     const query =
       "SELECT id,title,amount,date FROM expense ORDER BY amount DESC";
-    const result = await conn.execute(query);
+    const result = await db.execute(query);
     const parsedResult = expenseResult.parse(result.rows);
+    return parsedResult;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+});
+
+// GET EXPENSE
+
+const getExpenseArgs = z.object({
+  id: z.string(),
+});
+
+export const getExpense = makeDomainFunction(
+  getExpenseArgs,
+  envSchema
+)(async ({ id }, envSchema) => {
+  try {
+    const db = connect(config(envSchema));
+    const query = "SELECT * FROM expense WHERE id = ?;";
+    const params = [id];
+    const result = await db.execute(query, params);
+    const parsedResult = expense.parse(result.rows[0]);
     return parsedResult;
   } catch (error) {
     console.log(error);
