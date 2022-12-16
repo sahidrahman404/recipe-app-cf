@@ -7,8 +7,6 @@ import Modal from "~/components/util/Modal";
 import type { Env } from "~/db/dbConfig.server";
 import { addExpense } from "~/db/expense.server";
 
-export type AddAction = typeof action;
-
 export default function AddExpensesPage() {
   return (
     <Modal redirect={"/expenses"}>
@@ -17,6 +15,7 @@ export default function AddExpensesPage() {
   );
 }
 
+export type ActionData = typeof action;
 export async function action({
   request,
   context,
@@ -24,12 +23,11 @@ export async function action({
   request: Request;
   context: Env;
 }) {
-  const connect = addExpense(context);
-  const result = await connect(await inputFromForm(request));
+  const input = await inputFromForm(request);
+  const result = await addExpense(input, context);
 
   if (!result.success) {
     return json(result);
   }
-
   return redirect("/expenses");
 }

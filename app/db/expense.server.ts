@@ -1,33 +1,30 @@
 import { connect } from "@planetscale/database/dist";
 import { makeDomainFunction } from "domain-functions";
 import { z } from "zod";
-import type { Env } from "./dbConfig.server";
 import { envSchema } from "./dbConfig.server";
 import { config } from "./dbConfig.server";
 
-export function addExpense(context: Env) {
-  const schema = z.object({
+export const addExpense = makeDomainFunction(
+  z.object({
     title: z.string().min(5).max(30),
     amount: z.preprocess((val) => Number(val), z.number().positive()),
     date: z.preprocess((val) => {
       if (typeof val === "string" || val instanceof Date) return new Date(val);
     }, z.date().max(new Date())),
-  });
-
-  const add = makeDomainFunction(schema)(async ({ title, amount, date }) => {
-    try {
-      const conn = connect(config(context));
-      const query = "INSERT INTO expense (title, amount, date) VALUES(?,?,?)";
-      const params = [title, amount, date];
-      const result = await conn.execute(query, params);
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  });
-  return add;
-}
+  }),
+  envSchema
+)(async ({ title, amount, date }, envSchema) => {
+  try {
+    const db = connect(config(envSchema));
+    const query = "INSERT INTO expense (title, amount, date) VALUES(?,?,?)";
+    const params = [title, amount, new Date(date)];
+    const result = await db.execute(query, params);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+});
 
 // GET EXPENSE
 

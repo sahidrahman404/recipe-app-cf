@@ -1,10 +1,10 @@
 import { Link, useActionData } from "@remix-run/react";
 import { errorMessagesFor } from "domain-functions";
-import type { AddAction } from "~/routes/__app/expenses/add";
+import type { ActionData } from "~/routes/__app/expenses/add";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
-  const validationErrors = useActionData<AddAction>();
+  const validationErrors = useActionData<ActionData>();
 
   return (
     <form method="post" className="form" id="expense-form">
