@@ -75,16 +75,17 @@ export const getExpense = makeDomainFunction(
 });
 
 // UPDATE EXPENSE
+const updateSchema = z.object({
+  id: z.string().transform((val) => Number(val)),
+  title: z.string().min(5).max(30),
+  amount: z.preprocess((val) => Number(val), z.number().positive()),
+  date: z.preprocess((val) => {
+    if (typeof val === "string" || val instanceof Date) return new Date(val);
+  }, z.date().max(new Date())),
+});
 
 export const updateExpense = makeDomainFunction(
-  z.object({
-    id: z.string().transform((val) => Number(val)),
-    title: z.string().min(5).max(30),
-    amount: z.preprocess((val) => Number(val), z.number().positive()),
-    date: z.preprocess((val) => {
-      if (typeof val === "string" || val instanceof Date) return new Date(val);
-    }, z.date().max(new Date())),
-  }),
+  updateSchema,
   envSchema
 )(async ({ id, title, amount, date }, envSchema) => {
   try {
