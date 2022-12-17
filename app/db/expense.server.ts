@@ -4,28 +4,6 @@ import { z } from "zod";
 import { envSchema } from "./dbConfig.server";
 import { config } from "./dbConfig.server";
 
-export const addExpense = makeDomainFunction(
-  z.object({
-    title: z.string().min(5).max(30),
-    amount: z.preprocess((val) => Number(val), z.number().positive()),
-    date: z.preprocess((val) => {
-      if (typeof val === "string" || val instanceof Date) return new Date(val);
-    }, z.date().max(new Date())),
-  }),
-  envSchema
-)(async ({ title, amount, date }, envSchema) => {
-  try {
-    const db = connect(config(envSchema));
-    const query = "INSERT INTO expense (title, amount, date) VALUES(?,?,?)";
-    const params = [title, amount, new Date(date)];
-    const result = await db.execute(query, params);
-    return result;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-});
-
 // GET EXPENSES
 
 const expense = z.object({
