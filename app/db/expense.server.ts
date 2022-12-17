@@ -73,3 +73,29 @@ export const getExpense = makeDomainFunction(
     throw error;
   }
 });
+
+// UPDATE EXPENSE
+
+export const updateExpense = makeDomainFunction(
+  z.object({
+    id: z.string().transform((val) => Number(val)),
+    title: z.string().min(5).max(30),
+    amount: z.preprocess((val) => Number(val), z.number().positive()),
+    date: z.preprocess((val) => {
+      if (typeof val === "string" || val instanceof Date) return new Date(val);
+    }, z.date().max(new Date())),
+  }),
+  envSchema
+)(async ({ id, title, amount, date }, envSchema) => {
+  try {
+    const db = connect(config(envSchema));
+    const query =
+      "UPDATE expense SET title = ?, amount = ?, date = ? WHERE id = ?";
+    const params = [title, amount, date, id];
+    const result = db.execute(query, params);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+});
