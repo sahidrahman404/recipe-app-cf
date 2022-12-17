@@ -79,9 +79,7 @@ const updateSchema = z.object({
   id: z.string().transform((val) => Number(val)),
   title: z.string().min(5).max(30),
   amount: z.preprocess((val) => Number(val), z.number().positive()),
-  date: z.preprocess((val) => {
-    if (typeof val === "string" || val instanceof Date) return new Date(val);
-  }, z.date().max(new Date())),
+  date: z.string(),
 });
 
 export const updateExpense = makeDomainFunction(
@@ -92,7 +90,10 @@ export const updateExpense = makeDomainFunction(
     const db = connect(config(envSchema));
     const query =
       "UPDATE expense SET title = ?, amount = ?, date = ? WHERE id = ?";
-    const params = [title, amount, date, id];
+    const dateSchema = z.preprocess((val) => {
+      if (typeof val === "string" || val instanceof Date) return new Date(val);
+    }, z.date().max(new Date()));
+    const params = [title, amount, dateSchema.parse(date), id];
     const result = db.execute(query, params);
     return result;
   } catch (error) {
