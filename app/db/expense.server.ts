@@ -90,10 +90,7 @@ export const updateExpense = makeDomainFunction(
     const db = connect(config(envSchema));
     const query =
       "UPDATE expense SET title = ?, amount = ?, date = ? WHERE id = ?";
-    const dateSchema = z.preprocess((val) => {
-      if (typeof val === "string" || val instanceof Date) return new Date(val);
-    }, z.date().max(new Date()));
-    const params = [title, amount, dateSchema.parse(date), id];
+    const params = [title, amount, date, id];
     const result = db.execute(query, params);
     return result;
   } catch (error) {

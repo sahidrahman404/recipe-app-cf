@@ -1,11 +1,10 @@
-import { connect } from "@planetscale/database/dist";
 import { json, redirect } from "@remix-run/cloudflare";
 import type { Params } from "@remix-run/react";
-import { inputFromForm, makeDomainFunction } from "domain-functions";
+import { inputFromForm } from "domain-functions";
 import { z } from "zod";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
-import { config, Env, envSchema } from "~/db/dbConfig.server";
+import { Env } from "~/db/dbConfig.server";
 import { updateExpense } from "~/db/expense.server";
 // import type { Env } from "~/db/dbConfig.server";
 // import { getExpense } from "~/db/expense.server";
@@ -29,31 +28,14 @@ export async function action({
   context: Env;
 }) {
   const input = await inputFromForm(request);
-  const updateExpense = makeDomainFunction(
-    z.object({
-      id: z.string().transform((val) => Number(val)),
-      title: z.string().min(5).max(30),
-      amount: z.preprocess((val) => Number(val), z.number().positive()),
-      date: z.preprocess((val) => {
-        if (typeof val === "string" || val instanceof Date)
-          return new Date(val);
-      }, z.date().max(new Date())),
-    }),
-    envSchema
-  )(async ({ id, title, amount, date }, envSchema) => {
-    try {
-      const db = connect(config(envSchema));
-      const query =
-        "UPDATE expense SET title = ?, amount = ?, date = ? WHERE id = ?";
-      const params = [title, amount, date, id];
-      const result = db.execute(query, params);
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  });
-  const result = await updateExpense({ ...params, ...input }, context);
+  const dateScheme = z.preprocess((val) => {
+    if (typeof val === "string" || val instanceof Date) return new Date(val);
+  }, z.date().max(new Date()));
+  const dateValidation = dateScheme.parse(input.date);
+  const result = await updateExpense(
+    { ...params, ...input, dateValidation },
+    context
+  );
   if (!result.success) {
     return json(result);
   }
