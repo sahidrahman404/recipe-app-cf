@@ -1,4 +1,7 @@
 import { Link, useActionData, useMatches, useParams } from "@remix-run/react";
+import {
+  Form,
+} from "@remix-run/react";
 import { errorMessagesFor } from "domain-functions";
 // import type { LoaderData } from "~/routes/__app/expenses/$id";
 import type { ActionData } from "~/routes/__app/expenses/add";
@@ -30,7 +33,11 @@ function ExpenseForm() {
       };
 
   return (
-    <form method="post" className="form" id="expense-form">
+    <Form
+      method={expenses ? "patch" : "post"}
+      className="form"
+      id="expense-form"
+    >
       <p>
         <label htmlFor="title">Expense Title</label>
         <input
@@ -91,7 +98,7 @@ function ExpenseForm() {
         <button>Save Expense</button>
         <Link to="/expenses">Cancel</Link>
       </div>
-    </form>
+    </Form>
   );
 }
 
