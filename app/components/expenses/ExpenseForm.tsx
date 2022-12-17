@@ -1,6 +1,10 @@
-import { Link, useActionData, useMatches, useParams } from "@remix-run/react";
 import {
   Form,
+  Link,
+  useActionData,
+  useMatches,
+  useParams,
+  useTransition,
 } from "@remix-run/react";
 import { errorMessagesFor } from "domain-functions";
 // import type { LoaderData } from "~/routes/__app/expenses/$id";
@@ -16,6 +20,7 @@ function ExpenseForm() {
   const expenses = matches.find(
     (match) => match.id === "routes/__app/expenses"
   )?.data;
+
   const data = expenses
     ? expenses.find((expense: Expense) => expense.id === params.id)
     : null;
@@ -31,6 +36,9 @@ function ExpenseForm() {
         amount: "",
         date: "",
       };
+
+  const navigation = useTransition();
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <Form
@@ -95,7 +103,9 @@ function ExpenseForm() {
       </div>
 
       <div className="form-actions">
-        <button>Save Expense</button>
+        <button disabled={isSubmitting}>
+          {isSubmitting ? "Saving..." : "Save Expense"}
+        </button>
         <Link to="/expenses">Cancel</Link>
       </div>
     </Form>
