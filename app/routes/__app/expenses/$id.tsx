@@ -1,9 +1,9 @@
 import { json, redirect } from "@remix-run/cloudflare";
-import { Params, useActionData } from "@remix-run/react";
+import type { Params } from "@remix-run/react";
 import { inputFromForm } from "domain-functions";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
-import { Env } from "~/db/dbConfig.server";
+import type { Env } from "~/db/dbConfig.server";
 import { updateExpense } from "~/db/expense.server";
 // import type { Env } from "~/db/dbConfig.server";
 // import { getExpense } from "~/db/expense.server";
