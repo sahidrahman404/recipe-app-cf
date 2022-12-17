@@ -1,18 +1,23 @@
-// /expenses/anlysis
-
-import type { Expense } from "~/components/expenses/Chart";
+import { useLoaderData } from "@remix-run/react";
 import Chart from "~/components/expenses/Chart";
 import ExpenseStatistics from "~/components/expenses/ExpenseStatistics";
+import type { Env } from "~/db/dbConfig.server";
+import { getExpenses } from "~/db/expense.server";
+import { loaderResponseOrThrow } from "~/lib/index";
 
-const DUMMY_EXPENSES: Expense[] = [
-  { id: "e1", title: "first expense", date: "January 28 2022", amount: 200 },
-  { id: "e2", title: "second expense", date: "November 28 2022", amount: 300 },
-];
 export default function ExpensesAnalysisPage() {
+  const data = useLoaderData<typeof loader>();
+
   return (
     <main>
-      <Chart expenses={DUMMY_EXPENSES} />
-      <ExpenseStatistics expenses={DUMMY_EXPENSES} />
+      <Chart expenses={data} />
+      <ExpenseStatistics expenses={data} />
     </main>
   );
+}
+
+export async function loader({ context }: { context: Env }) {
+  const result = await getExpenses(context);
+
+  return loaderResponseOrThrow(result);
 }
