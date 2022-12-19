@@ -41,11 +41,7 @@ function ExpenseForm() {
   const isSubmitting = navigation.state === "submitting";
 
   return (
-    <Form
-      method={expenses ? "patch" : "post"}
-      className="form"
-      id="expense-form"
-    >
+    <Form method={data ? "patch" : "post"} className="form" id="expense-form">
       <p>
         <label htmlFor="title">Expense Title</label>
         <input
