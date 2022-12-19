@@ -79,6 +79,6 @@ export async function action({
     return redirect("/expenses");
   } else if (request.method === "DELETE") {
     await deleteExpense(params.id, context);
-    return redirect("/expenses");
+    return json({ deletedId: params.id });
   }
 }
