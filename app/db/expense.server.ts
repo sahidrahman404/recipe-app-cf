@@ -51,3 +51,20 @@ export const getExpense = makeDomainFunction(
     throw error;
   }
 });
+
+// DELETE EXPENSE
+export const deleteExpense = makeDomainFunction(
+  z.preprocess((val) => Number(val), z.number()),
+  envSchema
+)(async (id, envSchema) => {
+  try {
+    const db = connect(config(envSchema));
+    const query = "DELETE FROM expense WHERE id = ?";
+    const params = [id];
+    const result = await db.execute(query, params);
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+});
