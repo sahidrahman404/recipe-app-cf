@@ -1,9 +1,9 @@
 // /expenses/raw
 
 import type { LoaderFunction } from "@remix-run/cloudflare";
-import type { Expense } from "~/components/expenses/Chart";
+import { Expenses } from "~/domain/data/schema.server";
 
-const DUMMY_EXPENSES: Expense[] = [
+const DUMMY_EXPENSES: Expenses= [
     { id: "e1", title: "first expense", date: "January 28 2022", amount: 200 },
     { id: "e2", title: "second expense", date: "November 28 2022", amount: 300 },
 ];

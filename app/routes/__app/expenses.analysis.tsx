@@ -1,12 +1,12 @@
-import { useLoaderData } from "@remix-run/react";
 import Chart from "~/components/expenses/Chart";
 import ExpenseStatistics from "~/components/expenses/ExpenseStatistics";
-import type { Env } from "~/db/dbConfig.server";
-import { getExpenses } from "~/db/expense.server";
-import { loaderResponseOrThrow } from "~/lib/index";
+import type { Env } from "~/domain/data/env.server";
+import { superjson, useSuperLoaderData } from "~/domain/calculation/superjson";
+import { db } from "~/interaction/db/db.server";
+import { getExpenses } from "~/interaction/db/query.server";
 
 export default function ExpensesAnalysisPage() {
-  const data = useLoaderData<typeof loader>();
+  const data = useSuperLoaderData<typeof loader>();
 
   return (
     <main>
@@ -17,7 +17,8 @@ export default function ExpensesAnalysisPage() {
 }
 
 export async function loader({ context }: { context: Env }) {
-  const result = await getExpenses(context);
+  const conn = db(context);
+  const result = await getExpenses(conn);
 
-  return loaderResponseOrThrow(result);
+  return superjson(result);
 }
