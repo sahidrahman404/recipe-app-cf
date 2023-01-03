@@ -6,15 +6,13 @@ import {
   useParams,
   useTransition,
 } from "@remix-run/react";
-import { errorMessagesFor } from "domain-functions";
+import type { Expense } from "~/domain/data/schema.server";
 // import type { LoaderData } from "~/routes/__app/expenses/$id";
 import type { ActionData } from "~/routes/__app/expenses/add";
-import type { Expense } from "./Chart";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData<ActionData>();
-  // const data = useLoaderData<LoaderData>();
   const params = useParams();
   const matches = useMatches();
   const expenses = matches.find(
@@ -22,7 +20,7 @@ function ExpenseForm() {
   )?.data;
 
   const data = expenses
-    ? expenses.find((expense: Expense) => expense.id === params.id)
+    ? expenses.json.find((expense: Expense) => expense.id === params.id)
     : null;
 
   const defaultValue = data
@@ -54,9 +52,7 @@ function ExpenseForm() {
           defaultValue={defaultValue.title}
         />
         {typeof validationErrors !== "undefined" ? (
-          <span>
-            {errorMessagesFor(validationErrors?.inputErrors, "title")[0]}
-          </span>
+          <span>{validationErrors?.title?._errors}</span>
         ) : null}
       </p>
 
@@ -73,9 +69,7 @@ function ExpenseForm() {
             defaultValue={defaultValue.amount}
           />
           {typeof validationErrors !== "undefined" ? (
-            <span>
-              {errorMessagesFor(validationErrors?.inputErrors, "amount")[0]}
-            </span>
+            <span>{validationErrors?.amount?._errors}</span>
           ) : null}
         </p>
         <p>
@@ -91,9 +85,7 @@ function ExpenseForm() {
             }
           />
           {typeof validationErrors !== "undefined" ? (
-            <span>
-              {errorMessagesFor(validationErrors?.inputErrors, "date")[0]}
-            </span>
+            <span>{validationErrors?.date?._errors}</span>
           ) : null}
         </p>
       </div>

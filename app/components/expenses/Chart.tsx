@@ -1,14 +1,8 @@
+import type { Expenses } from "~/domain/data/schema.server";
 import type { Label } from "./ChartBar";
 import ChartBar from "./ChartBar";
 
-export type Expense = {
-  id: string;
-  title: string;
-  date: string;
-  amount: number;
-};
-
-function Chart({ expenses }: { expenses: Expense[] }) {
+function Chart({ expenses }: { expenses: Expenses }) {
   const chartDataPoints: { label: Label; value: number }[] = [
     { label: "Jan", value: 0 },
     { label: "Feb", value: 0 },

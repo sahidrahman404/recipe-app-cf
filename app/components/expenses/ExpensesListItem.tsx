@@ -1,5 +1,5 @@
 import { Link, useFetcher, useSubmit } from "@remix-run/react";
-import type { Expense } from "./Chart";
+import { Expense } from "~/domain/data/schema.server";
 
 function ExpenseListItem({ id, title, amount }: Omit<Expense, "date">) {
   const fetcher = useFetcher();
