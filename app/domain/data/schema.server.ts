@@ -1,4 +1,3 @@
-import { instanceOf } from "ts-pattern/dist/patterns";
 import { z } from "zod";
 
 export const expense = z.object({
@@ -21,7 +20,7 @@ export const expense = z.object({
   ),
   date: z.preprocess((arg) => {
     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
-  }, z.date().max(new Date())),
+  }, z.date()),
 });
 
 export type Expense = z.infer<typeof expense>;

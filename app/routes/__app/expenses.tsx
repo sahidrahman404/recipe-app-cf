@@ -32,6 +32,5 @@ export default function ExpensesLayout() {
 export async function loader({ context }: { context: Env }) {
   const conn = db(context);
   const result = await getExpenses(conn);
-
   return superjson(result);
 }

@@ -9,6 +9,7 @@ import { validateData } from "~/domain/calculation/validateData.server";
 import { expense } from "~/domain/data/schema.server";
 import { db } from "~/interaction/db/db.server";
 import { addExpense } from "~/interaction/db/mutation.server";
+import { z } from "zod";
 
 export default function AddExpensesPage() {
   return (
@@ -26,9 +27,14 @@ export async function action({
   request: Request;
   context: Env;
 }) {
+  const date = z.object({
+    date: z.preprocess((arg) => {
+      if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
+    }, z.date().max(new Date())),
+  });
   const formData = await parseForm(request);
   const validation = await validateData(
-    expense.pick({ amount: true, title: true, date: true }),
+    expense.pick({ amount: true, title: true }).merge(date),
     formData
   );
   if (validation.success === false) {
