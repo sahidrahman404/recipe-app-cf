@@ -1,3 +1,5 @@
 export type Env = {
-  DATABASE_URL: string;
+  DATABASE_HOST: string;
+  DATABASE_USERNAME: string;
+  DATABASE_PASSWORD: string;
 };

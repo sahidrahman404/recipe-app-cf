@@ -9,10 +9,16 @@ export type Database = {
   expenses: Expense;
 };
 
-export const db = ({ DATABASE_URL }: Env) => {
+export const db = ({
+  DATABASE_HOST,
+  DATABASE_PASSWORD,
+  DATABASE_USERNAME,
+}: Env) => {
   return new Kysely<Database>({
     dialect: new PlanetScaleDialect({
-      url: DATABASE_URL,
+      host: DATABASE_HOST,
+      username: DATABASE_USERNAME,
+      password: DATABASE_PASSWORD,
     }),
     plugins: [new CamelCasePlugin()],
   });
