@@ -18,6 +18,11 @@ export const expense = z.object({
       if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
     }, z.date())
   ),
+  updatedAt: z.optional(
+    z.preprocess((arg) => {
+      if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
+    }, z.date())
+  ),
   date: z.preprocess((arg) => {
     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
   }, z.date()),
