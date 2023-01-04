@@ -7,7 +7,7 @@ export const addExpense = async (
   { date, title, amount }: Expense
 ) => {
   const result = await db
-    .insertInto("expense")
+    .insertInto("expenses")
     .values({ title, date, amount })
     .executeTakeFirst();
   return result;
@@ -18,7 +18,7 @@ export const updateExpense = async (
   { id, title, amount, date }: Expense
 ) => {
   const result = await db
-    .updateTable("expense")
+    .updateTable("expenses")
     .set({ title, amount, date })
     .where("id", "=", id)
     .executeTakeFirstOrThrow();
@@ -27,8 +27,8 @@ export const updateExpense = async (
 
 export const deleteExpense = async (db: Kysely<Database>, { id }: Expense) => {
   const result = await db
-    .deleteFrom("expense")
+    .deleteFrom("expenses")
     .where("id", "=", id)
     .executeTakeFirstOrThrow();
-  return result
+  return result;
 };

@@ -2,23 +2,17 @@ import { CamelCasePlugin } from "kysely";
 
 import { Kysely } from "kysely";
 import { PlanetScaleDialect } from "kysely-planetscale";
-import { Env } from "~/domain/data/env.server";
+import type { Env } from "~/domain/data/env.server";
 import type { Expense } from "~/domain/data/schema.server";
 
 export type Database = {
-  expense: Expense;
+  expenses: Expense;
 };
 
-export const db = ({
-  DATABASE_HOST,
-  DATABASE_PASSWORD,
-  DATABASE_USERNAME,
-}: Env) => {
+export const db = ({ DATABASE_URL }: Env) => {
   return new Kysely<Database>({
     dialect: new PlanetScaleDialect({
-      host: DATABASE_HOST,
-      username: DATABASE_USERNAME,
-      password: DATABASE_PASSWORD,
+      url: DATABASE_URL,
     }),
     plugins: [new CamelCasePlugin()],
   });

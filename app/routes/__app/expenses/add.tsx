@@ -27,12 +27,12 @@ export async function action({
   request: Request;
   context: Env;
 }) {
+  const formData = await parseForm(request);
   const date = z.object({
     date: z.preprocess((arg) => {
       if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
     }, z.date().max(new Date())),
   });
-  const formData = await parseForm(request);
   const validation = await validateData(
     expense.pick({ amount: true, title: true }).merge(date),
     formData

@@ -6,7 +6,11 @@ import { expenses } from "~/domain/data/schema.server";
 import type { Database } from "~/interaction/db/db.server";
 
 export const getExpenses = async (db: Kysely<Database>) => {
-  const result = await db.selectFrom("expense").selectAll().execute();
+  const result = await db
+    .selectFrom("expenses")
+    .selectAll()
+    .orderBy("updatedAt", "desc")
+    .execute();
   const validation = await validateData(expenses, result);
   if (validation.success === false) {
     throw internalError(validation);
