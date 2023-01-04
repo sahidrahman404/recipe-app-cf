@@ -1,4 +1,4 @@
-import { Expenses } from "~/domain/data/schema.server";
+import type { Expenses } from "~/domain/data/schema.server";
 import ExpenseListItem from "./ExpensesListItem";
 
 function ExpensesList({ expenses }: { expenses: Expenses }) {

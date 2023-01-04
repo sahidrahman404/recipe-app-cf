@@ -1,6 +1,6 @@
 // /expenses => sahred layout
 
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { Link, Outlet } from "@remix-run/react";
 import { FaPlus, FaDownload } from "react-icons/fa";
 import ExpensesList from "~/components/expenses/ExpensesList";
 import type { Env } from "~/domain/data/env.server";

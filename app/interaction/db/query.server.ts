@@ -13,7 +13,8 @@ export const getExpenses = async (db: Kysely<Database>) => {
     .execute();
   const validation = await validateData(expenses, result);
   if (validation.success === false) {
-    throw internalError(validation);
+    console.log(validation.error);
+    throw internalError();
   }
   const validatedData: Expenses = validation.data;
   return validatedData;
