@@ -1,14 +1,14 @@
-import { Link, useFetcher, useSubmit } from "@remix-run/react";
-import { Expense } from "~/domain/data/schema.server";
+import { Link, useFetcher } from "@remix-run/react";
+import type { Expense as E } from "~/domain/data/schema.server";
 
-function ExpenseListItem({ id, title, amount }: Omit<Expense, "date">) {
+type Expense = {
+  id: string;
+} & Pick<E, "title"> &
+  Pick<E, "amount">;
+
+function ExpenseListItem({ id, title, amount }: Expense) {
   const fetcher = useFetcher();
-  // const submit = useSubmit();
   function deleteExpenseItemHandler() {
-    // submit(null, {
-    //   method: "delete",
-    //   action: `/expenses/${id}`,
-    // });
     const proceed = confirm("Are you sure do you want to delete this item?");
 
     if (!proceed) {
@@ -36,9 +36,6 @@ function ExpenseListItem({ id, title, amount }: Omit<Expense, "date">) {
       </div>
       <menu className="expense-actions">
         <button onClick={deleteExpenseItemHandler}>Delete</button>
-        {/* <Form method="delete" action={`/expenses/${id}`}> */}
-        {/*   <button>Delete</button> */}
-        {/* </Form> */}
         <Link to={id}>Edit</Link>
       </menu>
     </article>
