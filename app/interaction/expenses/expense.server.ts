@@ -1,6 +1,6 @@
 import type { Kysely } from "kysely";
-import type { Expense } from "~/domain/data/schema.server";
-import type { Database } from "~/interaction/db/db.server";
+import type { Expense } from "~/domain/data/expenses/expenseSchema.server";
+import type { Database } from "~/interaction/repo.server";
 
 export const addExpense = async (
   db: Kysely<Database>,
@@ -21,7 +21,7 @@ export const updateExpense = async (
     .updateTable("expenses")
     .set({ title, amount, date })
     .where("id", "=", id)
-    .executeTakeFirstOrThrow();
+    .executeTakeFirst();
   return result;
 };
 
@@ -29,6 +29,11 @@ export const deleteExpense = async (db: Kysely<Database>, { id }: Expense) => {
   const result = await db
     .deleteFrom("expenses")
     .where("id", "=", id)
-    .executeTakeFirstOrThrow();
+    .executeTakeFirst();
+  return result;
+};
+
+export const getExpenses = async (db: Kysely<Database>) => {
+  const result = await db.selectFrom("expenses").selectAll().execute();
   return result;
 };
