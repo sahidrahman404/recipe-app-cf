@@ -1,15 +1,14 @@
 import { CamelCasePlugin } from "kysely";
-
 import { Kysely } from "kysely";
 import { PlanetScaleDialect } from "kysely-planetscale";
 import type { Env } from "~/domain/data/env.server";
-import type { Expense } from "~/domain/data/schema.server";
+import type { Expense } from "~/domain/data/expenses/expenseSchema.server";
 
 export type Database = {
   expenses: Expense;
 };
 
-export const db = ({
+export const repo = ({
   DATABASE_HOST,
   DATABASE_PASSWORD,
   DATABASE_USERNAME,
