@@ -7,7 +7,6 @@ import { getExpenses } from "~/interaction/expenses/expense.server";
 
 export default function ExpensesAnalysisPage() {
   const data = useSuperLoaderData<typeof loader>();
-  console.log(data);
 
   return (
     <main>
@@ -19,7 +18,6 @@ export default function ExpensesAnalysisPage() {
 
 export async function loader({ context }: { context: Env }) {
   const conn = repo(context);
-  const result = await getExpenses(conn);
-
-  return superjson(result);
+  const results = await getExpenses(conn);
+  return superjson(results);
 }

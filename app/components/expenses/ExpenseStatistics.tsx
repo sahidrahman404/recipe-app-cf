@@ -2,13 +2,10 @@ import { useMemo } from "react";
 import type { Expenses } from "~/domain/data/expenses/expenseSchema.server";
 
 function calculateSummaryStatistics(expenses: Expenses) {
-  const amounts = expenses.map((expense) => Number(expense.amount));
+  const amounts = expenses.map((expense) => expense.amount);
   const maxAmount = Math.max(...amounts);
   const minAmount = Math.min(...amounts);
-  const sum = expenses.reduce(
-    (prevVal, curVal) => Number(curVal.amount) + prevVal,
-    0
-  );
+  const sum = expenses.reduce((prevVal, curVal) => curVal.amount + prevVal, 0);
   const mean = sum / expenses.length;
 
   return { minAmount, maxAmount, sum, mean };

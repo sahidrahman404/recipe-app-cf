@@ -1,6 +1,13 @@
 import type { Kysely } from "kysely";
-import type { Expense } from "~/domain/data/expenses/expenseSchema.server";
+import type {
+  Expense,
+  Expenses,
+} from "~/domain/data/expenses/expenseSchema.server";
 import type { Database } from "~/interaction/repo.server";
+import { validateData } from "~/domain/calculation/validateData.server";
+import { expenses } from "~/domain/data/expenses/expenseSchema.server";
+import { internalError } from "~/domain/calculation/internalError";
+import { SafeParseSuccess } from "zod";
 
 export const addExpense = async (
   db: Kysely<Database>,
@@ -33,7 +40,13 @@ export const deleteExpense = async (db: Kysely<Database>, { id }: Expense) => {
   return result;
 };
 
-export const getExpenses = async (db: Kysely<Database>) => {
-  const result = await db.selectFrom("expenses").selectAll().execute();
-  return result;
+type GetExpenses = (db: Kysely<Database>) => Promise<Expenses>;
+export const getExpenses: GetExpenses = async (db) => {
+  const results = await db.selectFrom("expenses").selectAll().execute();
+  const validatedResult = await validateData(expenses, results);
+  if (!validatedResult.success) {
+    console.log(validatedResult);
+    throw internalError();
+  }
+  return validatedResult.data as Expenses;
 };
