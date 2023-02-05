@@ -1,5 +1,5 @@
 import { Link, useFetcher } from "@remix-run/react";
-import type { Expense as E } from "~/domain/data/schema.server";
+import type { Expense as E } from "~/domain/data/expenses/expenseSchema.server";
 
 type Expense = {
   id: string;
@@ -32,7 +32,7 @@ function ExpenseListItem({ id, title, amount }: Expense) {
     <article className="expense-item">
       <div>
         <h2 className="expense-title">{title}</h2>
-        <p className="expense-amount">${amount.toFixed(2)}</p>
+        <p className="expense-amount">${Number(amount).toFixed(2)}</p>
       </div>
       <menu className="expense-actions">
         <button onClick={deleteExpenseItemHandler}>Delete</button>

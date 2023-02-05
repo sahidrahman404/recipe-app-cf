@@ -6,7 +6,7 @@ import {
   useParams,
   useTransition,
 } from "@remix-run/react";
-import type { Expense } from "~/domain/data/schema.server";
+import type { Expense } from "~/domain/data/expenses/expenseSchema.server";
 // import type { LoaderData } from "~/routes/__app/expenses/$id";
 import type { ActionData } from "~/routes/__app/expenses/add";
 

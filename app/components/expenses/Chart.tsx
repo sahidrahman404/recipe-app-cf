@@ -1,4 +1,4 @@
-import type { Expenses } from "~/domain/data/schema.server";
+import type { Expenses } from "~/domain/data/expenses/expenseSchema.server";
 import type { Label } from "./ChartBar";
 import ChartBar from "./ChartBar";
 

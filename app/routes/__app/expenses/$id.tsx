@@ -5,9 +5,13 @@ import Modal from "~/components/util/Modal";
 import type { Env } from "~/domain/data/env.server";
 import { parseForm } from "~/domain/calculation/parseForm.server";
 import { validateData } from "~/domain/calculation/validateData.server";
-import { expense } from "~/domain/data/schema.server";
-import { db } from "~/interaction/db/db.server";
-import { deleteExpense, updateExpense } from "~/interaction/db/mutation.server";
+import { expense } from "~/domain/data/expenses/expenseSchema.server";
+import { repo } from "~/interaction/repo.server";
+import {
+  deleteExpense,
+  updateExpense,
+} from "~/interaction/expenses/expense.server";
+import { z } from "zod";
 
 export default function UpdateExpensesPage() {
   return (
@@ -26,11 +30,16 @@ export async function action({
   request: Request;
   context: Env;
 }) {
-  const conn = db(context);
-  if (request.method === "PATCH") {
+  const conn = repo(context);
+  if (request.method === "PATCH" || request.method === "POST") {
     const formData = await parseForm(request);
+    const date = z.object({
+      date: z.preprocess((arg) => {
+        if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
+      }, z.date().max(new Date())),
+    });
     const validation = await validateData(
-      expense.pick({ id: true, date: true, amount: true, title: true }),
+      expense.pick({ id: true, amount: true, title: true }).merge(date),
       { ...params, ...formData }
     );
     if (validation.success === false) {
