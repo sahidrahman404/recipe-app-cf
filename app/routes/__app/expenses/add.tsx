@@ -6,7 +6,7 @@ import Modal from "~/components/util/Modal";
 import type { Env } from "~/domain/data/env.server";
 import { parseForm } from "~/domain/calculation/parseForm.server";
 import { validateData } from "~/domain/calculation/validateData.server";
-import { expense } from "~/domain/data/expenses/expenseSchema.server";
+import { Expense, expense, ExpenseInput } from "~/domain/data/expenses/expenseSchema.server";
 import { repo } from "~/interaction/repo.server";
 import { addExpense } from "~/interaction/expenses/expense.server";
 import { z } from "zod";
@@ -27,16 +27,15 @@ export async function action({
   request: Request;
   context: Env;
 }) {
-  const formData = await parseForm(request);
+  const formData = await parseForm(request) as ExpenseInput;
   const date = z.object({
     date: z.preprocess((arg) => {
       if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
     }, z.date().max(new Date())),
   });
-  const validation = await validateData(
-    expense.pick({ amount: true, title: true }).merge(date),
-    formData
-  );
+  const validation = await validateData<
+    Pick<Expense, "title" | "amount" | "date">
+  >(expense.pick({ amount: true, title: true }).merge(date), formData);
   if (validation.success === false) {
     return json(validation.error);
   }

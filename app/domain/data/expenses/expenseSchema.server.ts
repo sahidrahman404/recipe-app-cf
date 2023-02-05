@@ -24,3 +24,9 @@ export type Expense = z.infer<typeof expense>;
 export const expenses = z.array(expense);
 
 export type Expenses = z.infer<typeof expenses>;
+
+export type ExpenseInput = {
+  title: string;
+  amount: string;
+  date: string;
+}
