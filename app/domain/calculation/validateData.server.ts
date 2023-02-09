@@ -5,7 +5,8 @@ type ValidateData = <Data extends unknown>(
   zodSchema: z.ZodTypeAny,
   data: any
 ) => Promise<
-  z.SafeParseSuccess<Data> | { success: false; error: { _errors: string[] } }
+  | z.SafeParseSuccess<Data>
+  | { success: false; error: z.typeToFlattenedError<Data> }
 >;
 
 export const validateData: ValidateData = async (zodSchema, data) => {
@@ -14,7 +15,7 @@ export const validateData: ValidateData = async (zodSchema, data) => {
     .with({ success: true }, (result) => result)
     .with({ success: false }, (result) => ({
       ...result,
-      error: result.error.format(),
+      error: result.error.flatten(),
     }))
     .exhaustive();
 };

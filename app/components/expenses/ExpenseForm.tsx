@@ -52,7 +52,7 @@ function ExpenseForm() {
           defaultValue={defaultValue.title}
         />
         {typeof validationErrors !== "undefined" ? (
-          <span>{validationErrors?.title?._errors}</span>
+          <span>{validationErrors.fieldErrors.title}</span>
         ) : null}
       </p>
 
@@ -69,7 +69,7 @@ function ExpenseForm() {
             defaultValue={defaultValue.amount}
           />
           {typeof validationErrors !== "undefined" ? (
-            <span>{validationErrors?.amount?._errors}</span>
+            <span>{validationErrors.fieldErrors.amount}</span>
           ) : null}
         </p>
         <p>
@@ -85,7 +85,7 @@ function ExpenseForm() {
             }
           />
           {typeof validationErrors !== "undefined" ? (
-            <span>{validationErrors?.date?._errors}</span>
+            <span>{validationErrors.fieldErrors.date}</span>
           ) : null}
         </p>
       </div>
