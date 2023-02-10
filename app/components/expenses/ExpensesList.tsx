@@ -1,7 +1,7 @@
-import type { Expenses } from "~/domain/data/expenses/expenseSchema.server";
+import type { ExpensesF } from "~/domain/data/expenses/expenseSchema.server";
 import ExpenseListItem from "./ExpensesListItem";
 
-function ExpensesList({ expenses }: { expenses: Expenses }) {
+function ExpensesList({ expenses }: { expenses: ExpensesF }) {
   return (
     <ol id="expenses-list">
       {expenses.map((expense) => (
@@ -10,6 +10,7 @@ function ExpensesList({ expenses }: { expenses: Expenses }) {
             id={expense.id!}
             title={expense.title}
             amount={expense.amount}
+            date={expense.date}
           />
         </li>
       ))}

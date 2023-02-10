@@ -1,12 +1,7 @@
 import { Link, useFetcher } from "@remix-run/react";
-import type { Expense as E } from "~/domain/data/expenses/expenseSchema.server";
+import type { ExpenseF } from "~/domain/data/expenses/expenseSchema.server";
 
-type Expense = {
-  id: string;
-} & Pick<E, "title"> &
-  Pick<E, "amount">;
-
-function ExpenseListItem({ id, title, amount }: Expense) {
+function ExpenseListItem({ id, title, amount, date }: ExpenseF) {
   const fetcher = useFetcher();
   function deleteExpenseItemHandler() {
     const proceed = confirm("Are you sure do you want to delete this item?");
@@ -33,6 +28,7 @@ function ExpenseListItem({ id, title, amount }: Expense) {
       <div>
         <h2 className="expense-title">{title}</h2>
         <p className="expense-amount">${amount.toFixed(2)}</p>
+        <p className="expense-amount">{date}</p>
       </div>
       <menu className="expense-actions">
         <button onClick={deleteExpenseItemHandler}>Delete</button>

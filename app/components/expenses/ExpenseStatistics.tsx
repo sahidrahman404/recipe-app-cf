@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import type { Expenses } from "~/domain/data/expenses/expenseSchema.server";
+import type { ExpensesF } from "~/domain/data/expenses/expenseSchema.server";
 
-function calculateSummaryStatistics(expenses: Expenses) {
+function calculateSummaryStatistics(expenses: ExpensesF) {
   const amounts = expenses.map((expense) => expense.amount);
   const maxAmount = Math.max(...amounts);
   const minAmount = Math.min(...amounts);
@@ -11,7 +11,7 @@ function calculateSummaryStatistics(expenses: Expenses) {
   return { minAmount, maxAmount, sum, mean };
 }
 
-function ExpenseStatistics({ expenses }: { expenses: Expenses }) {
+function ExpenseStatistics({ expenses }: { expenses: ExpensesF }) {
   const { minAmount, maxAmount, sum, mean } = useMemo(
     () => calculateSummaryStatistics(expenses),
     [expenses]

@@ -4,15 +4,18 @@ import {
   useActionData,
   useMatches,
   useParams,
-  useTransition,
+  useTransition
 } from "@remix-run/react";
-import type { Expense } from "~/domain/data/expenses/expenseSchema.server";
-// import type { LoaderData } from "~/routes/__app/expenses/$id";
-import type { ActionData } from "~/routes/__app/expenses/add";
+import type { z } from "zod";
+import type {
+  Expense,
+  ExpenseError
+} from "~/domain/data/expenses/expenseSchema.server";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
-  const validationErrors = useActionData<ActionData>();
+  const validationErrors =
+    useActionData() as z.typeToFlattenedError<ExpenseError>;
   const params = useParams();
   const matches = useMatches();
   const expenses = matches.find(
@@ -20,14 +23,14 @@ function ExpenseForm() {
   )?.data;
 
   const data = expenses
-    ? expenses.json.find((expense: Expense) => expense.id === params.id)
+    ? expenses.find((expense: Expense) => expense.id === params.id)
     : null;
 
   const defaultValue = data
     ? {
         title: data.title,
         amount: data.amount,
-        date: data.date,
+        date: new Date(data.date).toISOString().slice(0, 10),
       }
     : {
         title: "",
@@ -80,9 +83,7 @@ function ExpenseForm() {
             name="date"
             max={today}
             required
-            defaultValue={
-              defaultValue.date ? defaultValue.date.slice(0, 10) : ""
-            }
+            defaultValue={defaultValue.date ? defaultValue.date : ""}
           />
           {typeof validationErrors !== "undefined" ? (
             <span>{validationErrors.fieldErrors.date}</span>
