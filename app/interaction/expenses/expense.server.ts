@@ -1,12 +1,9 @@
 import type { DeleteResult, InsertResult, Kysely, UpdateResult } from "kysely";
 import type {
   Expense,
-  Expenses,
+  ExpensesF,
 } from "~/domain/data/expenses/expenseSchema.server";
 import type { Database } from "~/interaction/repo.server";
-import { validateData } from "~/domain/calculation/validateData.server";
-import { expenses } from "~/domain/data/expenses/expenseSchema.server";
-import { internalError } from "~/domain/calculation/internalError";
 
 type AddExpense = (
   db: Kysely<Database>,
@@ -23,7 +20,7 @@ export const addExpense: AddExpense = async (db, { date, title, amount }) => {
 type UpdateExpense = (
   db: Kysely<Database>,
   { id, title, amount, date }: Pick<Expense, "id" | "title" | "amount" | "date">
-) => Promise<UpdateResult>
+) => Promise<UpdateResult>;
 export const updateExpense: UpdateExpense = async (
   db,
   { id, title, amount, date }
@@ -48,13 +45,16 @@ export const deleteExpense: DeleteExpense = async (db, { id }) => {
   return result;
 };
 
-type GetExpenses = (db: Kysely<Database>) => Promise<Expenses>;
+type GetExpenses = (db: Kysely<Database>) => Promise<ExpensesF>;
 export const getExpenses: GetExpenses = async (db) => {
-  const results = await db.selectFrom("expenses").selectAll().execute();
-  const validatedResult = await validateData<Expenses>(expenses, results);
-  if (!validatedResult.success) {
-    console.log(validatedResult);
-    throw internalError();
-  }
-  return validatedResult.data;
+  const results = await db
+    .selectFrom("expenses")
+    .select(["id", "date", "title", "amount"])
+    .execute();
+  const transformedResults = results.map((result) => ({
+    ...result,
+    amount: Number(result.amount),
+    date: result.date.toDateString(),
+  })) as ExpensesF;
+  return transformedResults;
 };
