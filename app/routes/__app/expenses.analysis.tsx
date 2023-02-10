@@ -1,12 +1,15 @@
+import type { TypedResponse } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 import Chart from "~/components/expenses/Chart";
 import ExpenseStatistics from "~/components/expenses/ExpenseStatistics";
 import type { Env } from "~/domain/data/env.server";
-import { superjson, useSuperLoaderData } from "~/domain/calculation/superjson";
-import { repo } from "~/interaction/repo.server";
+import type { ExpensesF } from "~/domain/data/expenses/expenseSchema.server";
 import { getExpenses } from "~/interaction/expenses/expense.server";
+import { repo } from "~/interaction/repo.server";
 
 export default function ExpensesAnalysisPage() {
-  const data = useSuperLoaderData<typeof loader>();
+  const data = useLoaderData() as ExpensesF;
 
   return (
     <main>
@@ -16,8 +19,8 @@ export default function ExpensesAnalysisPage() {
   );
 }
 
-export async function loader({ context }: { context: Env }) {
+export async function loader({ context }: { context: Env }): Promise<TypedResponse<ExpensesF>> {
   const conn = repo(context);
   const results = await getExpenses(conn);
-  return superjson(results);
+  return json(results);
 }

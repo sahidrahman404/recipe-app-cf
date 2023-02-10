@@ -1,15 +1,17 @@
 // /expenses => sahred layout
 
-import { Link, Outlet } from "@remix-run/react";
-import { FaPlus, FaDownload } from "react-icons/fa";
+import type { TypedResponse } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { FaDownload, FaPlus } from "react-icons/fa";
 import ExpensesList from "~/components/expenses/ExpensesList";
 import type { Env } from "~/domain/data/env.server";
-import { superjson, useSuperLoaderData } from "~/domain/calculation/superjson";
-import { repo } from "~/interaction/repo.server";
+import type { ExpensesF } from "~/domain/data/expenses/expenseSchema.server";
 import { getExpenses } from "~/interaction/expenses/expense.server";
+import { repo } from "~/interaction/repo.server";
 
 export default function ExpensesLayout() {
-  const data = useSuperLoaderData<typeof loader>();
+  const data = useLoaderData() as ExpensesF;
 
   return (
     <>
@@ -29,8 +31,12 @@ export default function ExpensesLayout() {
   );
 }
 
-export async function loader({ context }: { context: Env }) {
+export async function loader({
+  context,
+}: {
+  context: Env;
+}): Promise<TypedResponse<ExpensesF>> {
   const conn = repo(context);
   const result = await getExpenses(conn);
-  return superjson(result);
+  return json(result);
 }
