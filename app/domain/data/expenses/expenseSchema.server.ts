@@ -25,8 +25,24 @@ export const expenses = z.array(expense);
 
 export type Expenses = z.infer<typeof expenses>;
 
+export type ExpenseError = {
+  title: string;
+  amount: string;
+  date: Date;
+};
+
 export type ExpenseInput = {
   title: string;
   amount: string;
   date: string;
-}
+};
+
+// Frontend
+export type ExpenseF = {
+  readonly id: string;
+  readonly amount: number;
+  readonly title: string;
+  readonly date: string;
+};
+
+export type ExpensesF = ReadonlyArray<ExpenseF>;
