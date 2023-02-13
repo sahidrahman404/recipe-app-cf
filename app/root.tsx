@@ -1,5 +1,7 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
+  useCatch,
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -7,6 +9,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import type { ErrorInput } from "./components/util/Error";
+import Error from "./components/util/Error";
 
 import sharedStylesheet from "./styles/shared.css";
 
@@ -16,15 +20,16 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export default function App() {
+function Document({ title, children }: ErrorInput) {
   return (
     <html lang="en">
       <head>
+        <title>{title}</title>
         <Meta />
         <Links />
       </head>
       <body>
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -32,6 +37,35 @@ export default function App() {
     </html>
   );
 }
+
+export default function App() {
+  return (
+    <Document title={"hello"}>
+      <Outlet />
+    </Document>
+  );
+}
+
+export function CatchBoundary() {
+  const errorResponse = useCatch();
+  return (
+    <Document title={errorResponse.statusText}>
+      <main>
+        <Error title={errorResponse.statusText}>
+          <p>
+            {errorResponse.data?.message ||
+              "Something went wrong. Please try again later."}
+          </p>
+          <p>
+            Back to <Link to="/">safety</Link>.
+          </p>
+        </Error>
+      </main>
+    </Document>
+  );
+}
+
+export function ErrorBoundary() {}
 
 export const links: LinksFunction = function () {
   return [{ rel: "stylesheet", href: sharedStylesheet }];
