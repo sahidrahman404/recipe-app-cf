@@ -9,6 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import type { ErrorInput } from "./components/util/Error";
 import Error from "./components/util/Error";
 
@@ -65,8 +66,24 @@ export function CatchBoundary() {
   );
 }
 
-export function ErrorBoundary() {}
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  return (
+    <Document title="an error occurred">
+      <main>
+        <Error title="an error occurred">
+          <p>
+            {error.message ||
+              "Something went wrong. Please try again later."}
+          </p>
+          <p>
+            Back to <Link to="/">safety</Link>.
+          </p>
+        </Error>
+      </main>
+    </Document>
+  );
+};
 
-export const links: LinksFunction = function () {
+export const links: LinksFunction = function() {
   return [{ rel: "stylesheet", href: sharedStylesheet }];
 };
