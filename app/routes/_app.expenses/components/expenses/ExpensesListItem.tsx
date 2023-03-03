@@ -1,7 +1,7 @@
 import { Link, useFetcher } from "@remix-run/react";
 import type { ExpenseF } from "~/domain/data/expenses/expenseSchema.server";
 
-function ExpenseListItem({ id, title, amount, date }: ExpenseF) {
+export function ExpenseListItem({ id, title, amount, date }: ExpenseF) {
   const fetcher = useFetcher();
   function deleteExpenseItemHandler() {
     const proceed = confirm("Are you sure do you want to delete this item?");
@@ -37,5 +37,3 @@ function ExpenseListItem({ id, title, amount, date }: ExpenseF) {
     </article>
   );
 }
-
-export default ExpenseListItem;

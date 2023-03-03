@@ -1,7 +1,7 @@
 import type { ExpensesF } from "~/domain/data/expenses/expenseSchema.server";
-import ExpenseListItem from "./ExpensesListItem";
+import {ExpenseListItem} from "./ExpensesListItem";
 
-function ExpensesList({ expenses }: { expenses: ExpensesF }) {
+export function ExpensesList({ expenses }: { expenses: ExpensesF }) {
   return (
     <ol id="expenses-list">
       {expenses.map((expense) => (
@@ -17,5 +17,3 @@ function ExpensesList({ expenses }: { expenses: ExpensesF }) {
     </ol>
   );
 }
-
-export default ExpensesList;

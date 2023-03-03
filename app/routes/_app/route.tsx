@@ -1,7 +1,7 @@
 import type { LinksFunction } from "@remix-run/cloudflare";
 import { Outlet } from "@remix-run/react";
-import ExpensesHeader from "~/components/navigation/ExpensesHeader";
-import expensesStyles from "../styles/expenses.css";
+import {ExpensesHeader} from "~/routes/_app/components/navigation/ExpensesHeader";
+import expensesStyles from "~/styles/expenses.css";
 
 export default function ExpensesAppLayout() {
   return (

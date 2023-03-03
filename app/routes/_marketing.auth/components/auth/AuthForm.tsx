@@ -1,7 +1,7 @@
 import { Form, Link, useSearchParams, useNavigation } from "@remix-run/react";
 import { FaLock, FaUserPlus } from "react-icons/fa";
 
-function AuthForm() {
+export function AuthForm() {
   const [searchParams] = useSearchParams();
   const authMode = searchParams.get("mode") || "login";
   const navigation = useNavigation();
@@ -36,5 +36,3 @@ function AuthForm() {
     </Form>
   );
 }
-
-export default AuthForm;

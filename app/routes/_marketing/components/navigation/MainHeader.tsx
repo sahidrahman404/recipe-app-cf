@@ -1,7 +1,7 @@
 import { Link, NavLink } from "@remix-run/react";
-import Logo from "../util/Logo";
+import Logo from "~/components/util/Logo";
 
-function MainHeader() {
+export function MainHeader() {
   return (
     <header id="main-header">
       <Logo />
@@ -27,5 +27,3 @@ function MainHeader() {
     </header>
   );
 }
-
-export default MainHeader;

@@ -1,7 +1,7 @@
 import type { LinksFunction } from "@remix-run/cloudflare";
-import AuthForm from "~/components/auth/AuthForm";
+import {AuthForm} from "~/routes/_marketing.auth/components/auth/AuthForm";
 import { parseForm } from "~/domain/calculation/parseForm.server";
-import authStyles from "../styles/auth.css";
+import authStyles from "../../styles/auth.css";
 
 export default function AuthPage() {
   return <AuthForm />;

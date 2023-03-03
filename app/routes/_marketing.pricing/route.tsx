@@ -1,6 +1,6 @@
 import { FaTrophy, FaHandshake } from "react-icons/fa";
 
-import PricingPlan from "~/components/marketing/PricingPlan";
+import {PricingPlan} from "~/routes/_marketing.pricing/components/marketing/PricingPlan";
 
 const PRICING_PLANS = [
   {

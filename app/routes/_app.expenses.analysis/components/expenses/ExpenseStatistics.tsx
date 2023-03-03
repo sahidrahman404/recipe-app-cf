@@ -11,7 +11,7 @@ function calculateSummaryStatistics(expenses: ExpensesF) {
   return { minAmount, maxAmount, sum, mean };
 }
 
-function ExpenseStatistics({ expenses }: { expenses: ExpensesF }) {
+export function ExpenseStatistics({ expenses }: { expenses: ExpensesF }) {
   const { minAmount, maxAmount, sum, mean } = useMemo(
     () => calculateSummaryStatistics(expenses),
     [expenses]
@@ -41,5 +41,3 @@ function ExpenseStatistics({ expenses }: { expenses: ExpensesF }) {
     </section>
   );
 }
-
-export default ExpenseStatistics;

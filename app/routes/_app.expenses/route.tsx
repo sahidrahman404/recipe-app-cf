@@ -4,7 +4,7 @@ import type { TypedResponse } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { FaDownload, FaPlus } from "react-icons/fa";
-import ExpensesList from "~/components/expenses/ExpensesList";
+import { ExpensesList } from "~/routes/_app.expenses/components/expenses/ExpensesList";
 import type { Env } from "~/domain/data/env.server";
 import type { ExpensesF } from "~/domain/data/expenses/expenseSchema.server";
 import { getExpenses } from "~/interaction/expenses/expense.server";

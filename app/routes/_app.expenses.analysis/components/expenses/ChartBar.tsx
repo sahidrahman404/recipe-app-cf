@@ -12,13 +12,13 @@ export type Label =
   | "Nov"
   | "Dec";
 
-type Chart = {
+export type Chart = {
   maxValue: number;
   value: number;
   label: Label;
 };
 
-function ChartBar({ maxValue, value, label }: Chart) {
+export function ChartBar({ maxValue, value, label }: Chart) {
   let barFillHeight = "0%";
 
   if (maxValue > 0) {
@@ -37,5 +37,3 @@ function ChartBar({ maxValue, value, label }: Chart) {
     </div>
   );
 }
-
-export default ChartBar;

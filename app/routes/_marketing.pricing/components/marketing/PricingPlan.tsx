@@ -7,7 +7,7 @@ type Pricing = {
   icon: IconType;
 };
 
-function PricingPlan({ title, price, perks, icon }: Pricing) {
+export function PricingPlan({ title, price, perks, icon }: Pricing) {
   const Icon = icon;
   return (
     <article>
@@ -32,4 +32,3 @@ function PricingPlan({ title, price, perks, icon }: Pricing) {
   );
 }
 
-export default PricingPlan;

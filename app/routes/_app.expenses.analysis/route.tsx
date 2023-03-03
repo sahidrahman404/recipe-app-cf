@@ -1,8 +1,8 @@
 import type { TypedResponse } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
-import Chart from "~/components/expenses/Chart";
-import ExpenseStatistics from "~/components/expenses/ExpenseStatistics";
+import {Chart} from "~/routes/_app.expenses.analysis/components/expenses/Chart";
+import {ExpenseStatistics} from "~/routes/_app.expenses.analysis/components/expenses/ExpenseStatistics";
 import type { Env } from "~/domain/data/env.server";
 import type { ExpensesF } from "~/domain/data/expenses/expenseSchema.server";
 import { getExpenses } from "~/interaction/expenses/expense.server";
