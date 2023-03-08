@@ -11,7 +11,9 @@ import { getExpenses } from "~/interaction/expenses/expense.server";
 import { repo } from "~/interaction/repo.server";
 
 export default function ExpensesLayout() {
-  const data = useLoaderData() as ExpensesF;
+  const expenses = useLoaderData() as ExpensesF;
+
+  const hasExpenses = expenses && expenses.length > 0;
 
   return (
     <>
@@ -25,7 +27,15 @@ export default function ExpensesLayout() {
             <FaDownload /> <span>Load Raw Data</span>
           </a>
         </section>
-        <ExpensesList expenses={data} />
+        {hasExpenses && <ExpensesList expenses={expenses} />}
+        {!hasExpenses && (
+          <section id="no-expenses">
+            <h1>No expenses found</h1>
+            <p>
+              Start <Link to="add">adding some</Link> today.
+            </p>
+          </section>
+        )}
       </main>
     </>
   );
@@ -37,6 +47,17 @@ export async function loader({
   context: Env;
 }): Promise<TypedResponse<ExpensesF>> {
   const conn = repo(context);
-  const result = await getExpenses(conn);
-  return json(result);
+  const expenses = await getExpenses(conn);
+
+  // if (!expenses || expenses.length === 0) {
+  //   throw json(
+  //     { message: "Could not find any expenses" },
+  //     { status: 404, statusText: "No expenses found" }
+  //   );
+  // }
+  return json(expenses);
 }
+
+// export function CatchBoundary() {
+//   return <p>Error</p>;
+// }
