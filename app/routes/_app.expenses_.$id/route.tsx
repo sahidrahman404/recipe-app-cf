@@ -1,4 +1,5 @@
-import { json, redirect, TypedResponse } from "@remix-run/cloudflare";
+import type { TypedResponse } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 import type { Params } from "@remix-run/react";
 import { z } from "zod";
 import ExpenseForm from "~/components/expenses/ExpenseForm";

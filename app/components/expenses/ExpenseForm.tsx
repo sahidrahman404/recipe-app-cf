@@ -4,12 +4,12 @@ import {
   useActionData,
   useMatches,
   useParams,
-  useTransition
+  useNavigation,
 } from "@remix-run/react";
 import type { z } from "zod";
 import type {
   Expense,
-  ExpenseError
+  ExpenseError,
 } from "~/domain/data/expenses/expenseSchema.server";
 
 function ExpenseForm() {
@@ -38,7 +38,7 @@ function ExpenseForm() {
         date: "",
       };
 
-  const navigation = useTransition();
+  const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
   return (
