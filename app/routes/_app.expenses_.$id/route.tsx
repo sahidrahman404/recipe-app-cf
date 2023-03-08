@@ -50,7 +50,7 @@ export async function action({
       ...params,
       ...formData,
     });
-    if (validation.success === false) {
+    if (!validation.success) {
       return json(validation.error);
     }
     await updateExpense(conn, validation.data);
@@ -60,7 +60,7 @@ export async function action({
       expense.pick({ id: true }),
       params
     );
-    if (validation.success === false) {
+    if (!validation.success) {
       return null;
     }
     await deleteExpense(conn, validation.data);

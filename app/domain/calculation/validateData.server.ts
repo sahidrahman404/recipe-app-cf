@@ -10,12 +10,16 @@ type ValidateData = <Data extends unknown>(
 >;
 
 export const validateData: ValidateData = async (zodSchema, data) => {
-  const result = await zodSchema.safeParseAsync(data);
-  return match(result)
-    .with({ success: true }, (result) => result)
-    .with({ success: false }, (result) => ({
-      ...result,
-      error: result.error.flatten(),
-    }))
-    .exhaustive();
+  try {
+    const result = await zodSchema.safeParseAsync(data);
+    return match(result)
+      .with({ success: true }, (result) => result)
+      .with({ success: false }, (result) => ({
+        ...result,
+        error: result.error.flatten(),
+      }))
+      .exhaustive();
+  } catch (error) {
+    throw new Error("Error validating form data");
+  }
 };
