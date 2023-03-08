@@ -17,6 +17,7 @@ export default function ExpensesLayout() {
 
   return (
     <>
+      <Outlet />
       <main>
         <section id="expenses-actions">
           <Link to="add">

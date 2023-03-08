@@ -44,7 +44,7 @@ export function CatchBoundary() {
 
   return (
     <main>
-      <Error title={errorResponse.statusText}>
+      <Error title="Expenses not found">
         {errorResponse.data?.message || "Something went wrong"}
       </Error>
     </main>

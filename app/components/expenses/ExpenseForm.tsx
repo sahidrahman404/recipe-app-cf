@@ -19,7 +19,7 @@ function ExpenseForm() {
   const params = useParams();
   const matches = useMatches();
   const expenses = matches.find(
-    (match) => match.id === "routes/__app/expenses"
+    (match) => match.id === "routes/_app.expenses"
   )?.data;
 
   const data = expenses
