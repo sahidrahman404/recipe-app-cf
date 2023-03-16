@@ -11,11 +11,9 @@ import type { Env } from "~/domain/data/env.server";
 import type {
   Expense,
   ExpenseError,
-  ExpenseInput
+  ExpenseInput,
 } from "~/domain/data/expenses/expenseSchema.server";
-import {
-  expense
-} from "~/domain/data/expenses/expenseSchema.server";
+import { expense } from "~/domain/data/expenses/expenseSchema.server";
 import { addExpense } from "~/interaction/expenses/expense.server";
 import { repo } from "~/interaction/repo.server";
 
@@ -35,7 +33,7 @@ export async function action({
   request: Request;
   context: Env;
 }): Promise<TypedResponse<z.typeToFlattenedError<ExpenseError>>> {
-  const formData = (await parseForm(request)) as ExpenseInput;
+  const formData = await parseForm<ExpenseInput>(request);
 
   const date = z.object({
     date: z.preprocess((arg) => {

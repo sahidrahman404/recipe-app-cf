@@ -1,7 +1,7 @@
 import { match } from "ts-pattern";
 import type { z } from "zod";
 
-type ValidateData = <Data extends unknown>(
+type ValidateData = <Data>(
   zodSchema: z.ZodTypeAny,
   data: any
 ) => Promise<

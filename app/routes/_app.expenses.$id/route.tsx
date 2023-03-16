@@ -38,7 +38,7 @@ export async function action({
 }): Promise<TypedResponse<z.typeToFlattenedError<ExpenseError>> | null> {
   const conn = repo(context);
   if (request.method === "PATCH" || request.method === "POST") {
-    const formData = (await parseForm(request)) as ExpenseInput;
+    const formData = await parseForm<ExpenseInput>(request);
     const date = z.object({
       date: z.preprocess((arg) => {
         if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
