@@ -1,6 +1,5 @@
 // /expenses/add
 
-import type { TypedResponse } from "@remix-run/cloudflare";
 import { json, redirect } from "@remix-run/cloudflare";
 import { z } from "zod";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
@@ -8,10 +7,7 @@ import Modal from "~/components/util/Modal";
 import { parseForm } from "~/domain/calculation/parseForm.server";
 import { validateData } from "~/domain/calculation/validateData.server";
 import type { Env } from "~/domain/data/env.server";
-import type {
-  ExpenseError,
-  ExpenseInput,
-} from "~/domain/data/expenses/expenseSchema.server";
+import type { ExpenseInput } from "~/domain/data/expenses/expenseSchema.server";
 import { expense } from "~/domain/data/expenses/expenseSchema.server";
 import { addExpense } from "~/interaction/expenses/expense.server";
 import { repo } from "~/interaction/repo.server";
@@ -31,7 +27,7 @@ export async function action({
 }: {
   request: Request;
   context: Env;
-}): Promise<TypedResponse<z.typeToFlattenedError<ExpenseError>>> {
+}) {
   const formData = await parseForm<ExpenseInput>(request);
 
   const date = z.object({

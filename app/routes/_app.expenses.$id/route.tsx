@@ -1,4 +1,3 @@
-import type { TypedResponse } from "@remix-run/cloudflare";
 import { json, redirect } from "@remix-run/cloudflare";
 import type { Params } from "@remix-run/react";
 import { z } from "zod";
@@ -7,11 +6,7 @@ import Modal from "~/components/util/Modal";
 import { parseForm } from "~/domain/calculation/parseForm.server";
 import { validateData } from "~/domain/calculation/validateData.server";
 import type { Env } from "~/domain/data/env.server";
-import type {
-  Expense,
-  ExpenseError,
-  ExpenseInput,
-} from "~/domain/data/expenses/expenseSchema.server";
+import type { ExpenseInput } from "~/domain/data/expenses/expenseSchema.server";
 import { expense } from "~/domain/data/expenses/expenseSchema.server";
 import {
   deleteExpense,
@@ -35,7 +30,7 @@ export async function action({
   params: Params;
   request: Request;
   context: Env;
-}): Promise<TypedResponse<z.typeToFlattenedError<ExpenseError>> | null> {
+}) {
   const conn = repo(context);
   if (request.method === "PATCH" || request.method === "POST") {
     const formData = await parseForm<ExpenseInput>(request);
@@ -63,5 +58,5 @@ export async function action({
     }
     await deleteExpense(conn, validation.data);
   }
-  return null;
+  return null
 }

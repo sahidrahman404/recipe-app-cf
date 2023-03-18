@@ -1,17 +1,15 @@
 // /expenses => sahred layout
 
-import type { TypedResponse } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { FaDownload, FaPlus } from "react-icons/fa";
 import { ExpensesList } from "~/routes/_app.expenses/components/expenses/ExpensesList";
 import type { Env } from "~/domain/data/env.server";
-import type { ExpensesF } from "~/domain/data/expenses/expenseSchema.server";
 import { getExpenses } from "~/interaction/expenses/expense.server";
 import { repo } from "~/interaction/repo.server";
 
 export default function ExpensesLayout() {
-  const expenses = useLoaderData() as ExpensesF;
+  const expenses = useLoaderData<typeof loader>();
 
   const hasExpenses = expenses && expenses.length > 0;
 
@@ -41,11 +39,7 @@ export default function ExpensesLayout() {
   );
 }
 
-export async function loader({
-  context,
-}: {
-  context: Env;
-}): Promise<TypedResponse<ExpensesF>> {
+export async function loader({ context }: { context: Env }) {
   const conn = repo(context);
   const expenses = await getExpenses(conn);
 

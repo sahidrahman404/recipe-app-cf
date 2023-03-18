@@ -6,16 +6,12 @@ import {
   useParams,
   useNavigation,
 } from "@remix-run/react";
-import type { z } from "zod";
-import type {
-  Expense,
-  ExpenseError,
-} from "~/domain/data/expenses/expenseSchema.server";
+import type { Expense } from "~/domain/data/expenses/expenseSchema.server";
+import type { ActionData } from "~/routes/_app.expenses.add/route";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
-  const validationErrors =
-    useActionData() as z.typeToFlattenedError<ExpenseError>;
+  const validationErrors = useActionData<ActionData>();
   const params = useParams();
   const matches = useMatches();
   const expenses = matches.find(
