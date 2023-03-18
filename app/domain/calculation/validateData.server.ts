@@ -1,12 +1,12 @@
 import { match } from "ts-pattern";
 import type { z } from "zod";
 
-type ValidateData = <Data>(
-  zodSchema: z.ZodTypeAny,
+type ValidateData = <TData extends z.ZodType<any, any, any>>(
+  zodSchema: TData,
   data: any
 ) => Promise<
-  | z.SafeParseSuccess<Data>
-  | { success: false; error: z.typeToFlattenedError<Data> }
+  | z.SafeParseSuccess<z.infer<TData>>
+  | { success: false; error: z.typeToFlattenedError<z.infer<TData>> }
 >;
 
 export const validateData: ValidateData = async (zodSchema, data) => {
