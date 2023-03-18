@@ -44,22 +44,20 @@ export async function action({
         if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
       }, z.date().max(new Date())),
     });
-    const validation = await validateData<
-      Omit<Expense, "createdAt" | "updatedAt">
-    >(expense.pick({ id: true, amount: true, title: true }).merge(date), {
-      ...params,
-      ...formData,
-    });
+    const validation = await validateData(
+      expense.pick({ id: true, amount: true, title: true }).merge(date),
+      {
+        ...params,
+        ...formData,
+      }
+    );
     if (!validation.success) {
       return json(validation.error);
     }
     await updateExpense(conn, validation.data);
     return redirect("/expenses");
   } else if (request.method === "DELETE") {
-    const validation = await validateData<{ id: string }>(
-      expense.pick({ id: true }),
-      params
-    );
+    const validation = await validateData(expense.pick({ id: true }), params);
     if (!validation.success) {
       return null;
     }

@@ -9,7 +9,6 @@ import { parseForm } from "~/domain/calculation/parseForm.server";
 import { validateData } from "~/domain/calculation/validateData.server";
 import type { Env } from "~/domain/data/env.server";
 import type {
-  Expense,
   ExpenseError,
   ExpenseInput,
 } from "~/domain/data/expenses/expenseSchema.server";
@@ -41,9 +40,10 @@ export async function action({
     }, z.date().max(new Date())),
   });
 
-  const validation = await validateData<
-    Pick<Expense, "title" | "amount" | "date">
-  >(expense.pick({ amount: true, title: true }).merge(date), formData);
+  const validation = await validateData(
+    expense.pick({ amount: true, title: true }).merge(date),
+    formData
+  );
 
   if (validation.success === false) {
     return json(validation.error);
